@@ -4,10 +4,16 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { PencilSquare, Trash3Fill } from 'react-bootstrap-icons';
 import Link from 'next/link';
+import { deleteMember } from '../API/membersData';
 
-const MemberCard = ({ obj }) => {
+const MemberCard = ({ obj, onUpdate }) => {
   console.warn('you are at the MemberCard area');
-  console.warn(obj);
+
+  const deleteThisMember = () => {
+    if (window.confirm(`Delete ${obj.memberName}? This is irreversible`)) {
+      deleteMember(obj.firebaseKey).then(() => onUpdate());
+    }
+  };
 
   return (
     <Card style={{ width: '18rem' }}>
@@ -23,7 +29,7 @@ const MemberCard = ({ obj }) => {
           <PencilSquare type="button" />
         </Link>
 
-        <Trash3Fill type="button" />
+        <Trash3Fill type="button" onClick={deleteThisMember} />
       </Card.Body>
     </Card>
   );
@@ -36,6 +42,7 @@ MemberCard.propTypes = {
     image: PropTypes.string,
     wildcard: PropTypes.string,
   }.isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 export default MemberCard;
