@@ -1,5 +1,9 @@
-import { Card, Button } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+// import { BsFillCupHotFill } from 'bootstrap-icons';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { PencilSquare, Trash3Fill } from 'react-bootstrap-icons';
+import Link from 'next/link';
 
 const MemberCard = ({ obj }) => {
   console.warn('you are at the MemberCard area');
@@ -14,7 +18,12 @@ const MemberCard = ({ obj }) => {
         <Card.Text>
           {obj.wildcard}
         </Card.Text>
-        <Button variant="primary">Go somewhere</Button>
+
+        <Link href={`/Members/edit/${obj.firebaseKey}`} passHref>
+          <PencilSquare type="button" />
+        </Link>
+
+        <Trash3Fill type="button" />
       </Card.Body>
     </Card>
   );
