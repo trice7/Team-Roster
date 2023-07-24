@@ -11,6 +11,7 @@ const initialState = {
   role: '',
   image: '',
   wildcard: '',
+  team: '',
 };
 
 const MemberForm = ({ obj }) => {
@@ -40,13 +41,13 @@ const MemberForm = ({ obj }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (obj.firebaseKey) {
-      updateMember(formInput).then(() => router.push('/'));
+      updateMember(formInput).then(() => router.push('/Members/Members'));
     } else {
       const payload = { ...formInput, uid: user.uid };
       createMember(payload).then(({ name }) => {
         const patchPayload = { firebaseKey: name };
         updateMember(patchPayload).then(() => {
-          router.push('/');
+          router.push('/Members/Members');
         });
       });
     }
@@ -102,11 +103,10 @@ const MemberForm = ({ obj }) => {
 
       <FloatingLabel controlId="floatingSelect" label="Team">
         <Form.Select
-          aria-label="Team"
+          aria-label="team"
           name="team"
           onChange={handleChange}
           className="mb-3"
-          value={obj.team}
           required
         >
           <option value="">Select a Team</option>

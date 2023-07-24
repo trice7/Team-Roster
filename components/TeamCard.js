@@ -4,14 +4,15 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { PencilSquare, Trash3Fill } from 'react-bootstrap-icons';
 import Link from 'next/link';
-import { deleteTeam } from '../API/teamData';
+// import { deleteTeam } from '../API/teamData';
+import { deleteTeamsMembers } from '../API/mergedData';
 
 const TeamCard = ({ obj, onUpdate }) => {
   console.warn('you are at the MemberCard area');
 
   const deleteThisTeam = () => {
     if (window.confirm(`Delete ${obj.teamName}? This will also delete all members. This is irreversible`)) {
-      deleteTeam(obj.firebaseKey).then(() => onUpdate());
+      deleteTeamsMembers(obj.firebaseKey).then(() => onUpdate());
     }
   };
 

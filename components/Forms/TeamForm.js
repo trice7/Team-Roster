@@ -34,13 +34,13 @@ const TeamForm = ({ obj }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (obj.firebaseKey) {
-      updateTeam(formInput).then(() => router.push('/'));
+      updateTeam(formInput).then(() => router.push('/Teams/Teams'));
     } else {
       const payload = { ...formInput, uid: user.uid };
       createTeam(payload).then(({ name }) => {
         const patchPayload = { firebaseKey: name };
         updateTeam(patchPayload).then(() => {
-          router.push('/');
+          router.push('/Teams/Teams');
         });
       });
     }

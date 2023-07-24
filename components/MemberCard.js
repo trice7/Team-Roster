@@ -4,16 +4,23 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { PencilSquare, Trash3Fill } from 'react-bootstrap-icons';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { deleteMember } from '../API/membersData';
+import { getSingleTeam } from '../API/teamData';
 
 const MemberCard = ({ obj, onUpdate }) => {
   console.warn('you are at the MemberCard area');
+  const [teams, setTeams] = useState([]);
 
   const deleteThisMember = () => {
     if (window.confirm(`Delete ${obj.memberName}? This is irreversible`)) {
       deleteMember(obj.firebaseKey).then(() => onUpdate());
     }
   };
+
+  useEffect(() => {
+    getSingleTeam(obj.team).then(setTeams);
+  }, [obj]);
 
   return (
     <Card style={{ width: '18rem' }}>
@@ -31,6 +38,7 @@ const MemberCard = ({ obj, onUpdate }) => {
 
         <Trash3Fill type="button" onClick={deleteThisMember} />
       </Card.Body>
+      <Card.Footer> Member of the {teams.teamName}</Card.Footer>
     </Card>
   );
 };
