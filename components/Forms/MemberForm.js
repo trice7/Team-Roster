@@ -4,21 +4,24 @@ import { Form, FloatingLabel, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { useAuth } from '../../utils/context/authContext';
 import { createMember, updateMember } from '../../API/membersData';
+import { getTeams } from '../../API/teamData';
 
 const initialState = {
   memberName: '',
   role: '',
   image: '',
   wildcard: '',
+  team: '',
 };
 
 const MemberForm = ({ obj }) => {
   const [formInput, setFormInput] = useState(initialState);
+  const [teams, setTeams] = useState([]);
   const router = useRouter();
   const { user } = useAuth();
 
   useEffect(() => {
-    // TODO: Add a useState for teams so that I can list them on the form.
+    getTeams(user.uid).then(setTeams);
 
     if (obj.firebaseKey) setFormInput(obj);
     console.warn(obj);
@@ -38,13 +41,13 @@ const MemberForm = ({ obj }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (obj.firebaseKey) {
-      updateMember(formInput).then(() => router.push('/'));
+      updateMember(formInput).then(() => router.push('/Members/Members'));
     } else {
       const payload = { ...formInput, uid: user.uid };
       createMember(payload).then(({ name }) => {
         const patchPayload = { firebaseKey: name };
         updateMember(patchPayload).then(() => {
-          router.push('/');
+          router.push('/Members/Members');
         });
       });
     }
@@ -91,10 +94,33 @@ const MemberForm = ({ obj }) => {
         <Form.Control
           type="text"
           placeholder="Enter Misc Info"
+          aria-label="Enter Misc Info"
           name="wildcard"
           value={formInput.wildcard}
           onChange={handleChange}
         />
+      </FloatingLabel>
+
+      <FloatingLabel controlId="floatingSelect" label="Team">
+        <Form.Select
+          aria-label="team"
+          name="team"
+          onChange={handleChange}
+          className="mb-3"
+          required
+        >
+          <option value="">Select a Team</option>
+          {
+            teams.map((item) => (
+              <option
+                key={item.firebaseKey}
+                value={item.firebaseKey}
+              >
+                {item.teamName}
+              </option>
+            ))
+          }
+        </Form.Select>
       </FloatingLabel>
 
       <Button type="submit">{obj.firebaseKey ? 'Update' : 'Create'} Member</Button>
