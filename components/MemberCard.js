@@ -2,7 +2,7 @@ import { Card } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 // import { BsFillCupHotFill } from 'bootstrap-icons';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { PencilSquare, Trash3Fill } from 'react-bootstrap-icons';
+import { PencilSquare, Trash3Fill, ArrowRepeat } from 'react-bootstrap-icons';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { deleteMember } from '../API/membersData';
@@ -41,6 +41,7 @@ const MemberCard = ({ obj, onUpdate }) => {
         ) : ''}
 
         {user.uid === obj.uid ? (<Trash3Fill type="button" onClick={deleteThisMember} />) : ''}
+        {user.uid !== obj.uid ? (<ArrowRepeat type="button" />) : ''}
       </Card.Body>
       <Card.Footer> Member of the {teams.teamName}</Card.Footer>
     </Card>

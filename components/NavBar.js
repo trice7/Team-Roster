@@ -36,6 +36,9 @@ export default function NavBar() {
             <Link passHref href="/Community/Community">
               <Nav.Link>Community</Nav.Link>
             </Link>
+            <Link passHref href="/Community/Trades">
+              <Nav.Link>Trades</Nav.Link>
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
