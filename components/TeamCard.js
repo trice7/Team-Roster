@@ -2,19 +2,43 @@ import { Card } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 // import { BsFillCupHotFill } from 'bootstrap-icons';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { PencilSquare, Trash3Fill } from 'react-bootstrap-icons';
+import {
+  PencilSquare,
+  Trash3Fill,
+  LockFill,
+  UnlockFill,
+  CardList,
+} from 'react-bootstrap-icons';
 import Link from 'next/link';
 // import { deleteTeam } from '../API/teamData';
 import { deleteTeamsMembers } from '../API/mergedData';
+import { getSingleTeam, updateTeam } from '../API/teamData';
+import { useAuth } from '../utils/context/authContext';
 
 const TeamCard = ({ obj, onUpdate }) => {
-  console.warn('you are at the MemberCard area');
+  const { user } = useAuth();
 
   const deleteThisTeam = () => {
     if (window.confirm(`Delete ${obj.teamName}? This will also delete all members. This is irreversible`)) {
       deleteTeamsMembers(obj.firebaseKey).then(() => onUpdate());
     }
   };
+
+  const changePrivate = () => {
+    getSingleTeam(obj.firebaseKey).then(({ firebaseKey }) => {
+      const priv = obj.isPrivate;
+      const patchedPayload = { isPrivate: !priv, firebaseKey };
+
+      updateTeam(patchedPayload).then(onUpdate());
+    });
+  };
+
+  let privateIcon;
+  if (obj.isPrivate) {
+    privateIcon = (<LockFill type="button" onClick={changePrivate} />);
+  } else {
+    privateIcon = (<UnlockFill type="button" onClick={changePrivate} />);
+  }
 
   return (
     <Card style={{ width: '18rem' }}>
@@ -26,11 +50,19 @@ const TeamCard = ({ obj, onUpdate }) => {
           {obj.description}
         </Card.Text>
 
-        <Link href={`/Teams/edit/${obj.firebaseKey}`} passHref>
-          <PencilSquare type="button" />
-        </Link>
+        {user.uid === obj.uid ? (
+          <Link href={`/Teams/edit/${obj.firebaseKey}`} passHref>
+            <PencilSquare type="button" />
+          </Link>
+        ) : ''}
 
-        <Trash3Fill type="button" onClick={deleteThisTeam} />
+        {user.uid === obj.uid ? (<Trash3Fill type="button" onClick={deleteThisTeam} />) : ''}
+
+        {user.uid === obj.uid ? privateIcon : ''}
+
+        <Link href={`/Members/Group/${obj.firebaseKey}`} passHref>
+          <CardList type="button" />
+        </Link>
       </Card.Body>
     </Card>
   );

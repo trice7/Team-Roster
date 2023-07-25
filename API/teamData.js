@@ -15,6 +15,18 @@ const getTeams = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getCommunityTeams = () => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/teams.json?orderBy="isPrivate"&equalTo=${false}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => resolve(Object.values(data)))
+    .catch(reject);
+});
+
 const deleteTeam = (firebaseKey) => new Promise((resolve, reject) => {
   fetch(`${endpoint}/teams/${firebaseKey}.json`, {
     method: 'DELETE',
@@ -67,6 +79,7 @@ const updateTeam = (payload) => new Promise((resolve, reject) => {
 
 export {
   getTeams,
+  getCommunityTeams,
   getSingleTeam,
   updateTeam,
   deleteTeam,
