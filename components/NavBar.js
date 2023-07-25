@@ -33,6 +33,9 @@ export default function NavBar() {
             <Link passHref href="/Members/new">
               <Nav.Link>Create Member</Nav.Link>
             </Link>
+            <Link passHref href="/Community/Community">
+              <Nav.Link>Community</Nav.Link>
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
