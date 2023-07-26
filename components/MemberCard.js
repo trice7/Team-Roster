@@ -2,16 +2,31 @@ import { Card } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 // import { BsFillCupHotFill } from 'bootstrap-icons';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { PencilSquare, Trash3Fill, ArrowRepeat } from 'react-bootstrap-icons';
+import {
+  PencilSquare,
+  Trash3Fill,
+  ArrowRepeat,
+  Check2Circle,
+  XCircleFill,
+} from 'react-bootstrap-icons';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { deleteMember } from '../API/membersData';
 import { getSingleTeam } from '../API/teamData';
 import { useAuth } from '../utils/context/authContext';
 
-const MemberCard = ({ obj, onUpdate }) => {
+const initialTeam = {
+  teamName: '',
+};
+
+const MemberCard = ({
+  obj,
+  onUpdate,
+  tradeCheck,
+  tradeX,
+}) => {
   console.warn('you are at the MemberCard area');
-  const [teams, setTeams] = useState([]);
+  const [teams, setTeams] = useState(initialTeam);
   const { user } = useAuth();
 
   const deleteThisMember = () => {
@@ -20,8 +35,12 @@ const MemberCard = ({ obj, onUpdate }) => {
     }
   };
 
+  const getMemberTeam = (team) => {
+    getSingleTeam(team).then(setTeams);
+  };
+
   useEffect(() => {
-    getSingleTeam(obj.team).then(setTeams);
+    getMemberTeam(obj.team);
   }, [obj]);
 
   return (
@@ -41,9 +60,16 @@ const MemberCard = ({ obj, onUpdate }) => {
         ) : ''}
 
         {user.uid === obj.uid ? (<Trash3Fill type="button" onClick={deleteThisMember} />) : ''}
-        {user.uid !== obj.uid ? (<ArrowRepeat type="button" />) : ''}
+        {user.uid !== obj.uid ? (
+          <Link href={`/Community/${obj.firebaseKey}`} passHref>
+            <ArrowRepeat type="button" />
+          </Link>
+        ) : ''}
+
+        {tradeCheck ? (<Check2Circle type="button" onClick={tradeCheck} />) : ''}
+        {tradeX ? (<XCircleFill type="button" onClick={tradeX} />) : ''}
       </Card.Body>
-      <Card.Footer> Member of the {teams.teamName}</Card.Footer>
+      {teams.teamName ? (<Card.Footer> Member of the {teams.teamName}</Card.Footer>) : ''}
     </Card>
   );
 };
@@ -56,6 +82,8 @@ MemberCard.propTypes = {
     wildcard: PropTypes.string,
   }.isRequired,
   onUpdate: PropTypes.func.isRequired,
+  tradeCheck: PropTypes.func.isRequired,
+  tradeX: PropTypes.func.isRequired,
 };
 
 export default MemberCard;

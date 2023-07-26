@@ -12,6 +12,8 @@ const initialState = {
   image: '',
   wildcard: '',
   team: '',
+  tradeRequested: false,
+  offerId: '',
 };
 
 const MemberForm = ({ obj }) => {
@@ -43,7 +45,7 @@ const MemberForm = ({ obj }) => {
     if (obj.firebaseKey) {
       updateMember(formInput).then(() => router.push('/Members/Members'));
     } else {
-      const payload = { ...formInput, uid: user.uid };
+      const payload = { ...formInput, uid: user.uid, owner: user.displayName };
       createMember(payload).then(({ name }) => {
         const patchPayload = { firebaseKey: name };
         updateMember(patchPayload).then(() => {
