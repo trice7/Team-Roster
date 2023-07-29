@@ -8,7 +8,6 @@ import { denyTradeRequest } from '../API/mergedData';
 const TradeRow = ({ offers }) => {
   console.warn('Youre now on trade row');
   const [trade, setTrade] = useState({});
-  const [reload, setReload] = useState(true);
 
   const denyTrade = () => {
     denyTradeRequest(offers.firebaseKey).then();
@@ -46,7 +45,7 @@ const TradeRow = ({ offers }) => {
 
   useEffect(() => {
     getSingleMember(offers.offerId).then(setTrade);
-  }, [offers, reload]);
+  }, [offers]);
 
   return (
     <tr>
