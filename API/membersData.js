@@ -15,6 +15,21 @@ const getMembers = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getOfferMembers = (uid) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/members.json?orderBy="uid"&equalTo="${uid}"`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const requested = Object.values(data).filter((item) => item.offerId);
+      resolve(requested);
+    })
+    .catch(reject);
+});
+
 const deleteMember = (firebaseKey) => new Promise((resolve, reject) => {
   fetch(`${endpoint}/members/${firebaseKey}.json`, {
     method: 'DELETE',
@@ -69,6 +84,7 @@ export {
   getMembers,
   getSingleMember,
   deleteMember,
+  getOfferMembers,
   createMember,
   updateMember,
 };

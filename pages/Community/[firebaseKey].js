@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 import { getMembers, getSingleMember } from '../../API/membersData';
 import { useAuth } from '../../utils/context/authContext';
 import MemberCard from '../../components/MemberCard';
+import { tradeRequestPromise } from '../../API/mergedData';
 
 // const placeholder = {
 //   memberName: 'No member selected',
@@ -35,11 +36,35 @@ const TradeInfo = () => {
   //   console.warn('enabled trade on this card');
   // };
 
+  // const updateMyMember = () => {
+  //   getSingleMember(myInfo.firebaseKey).then(() => {
+  //     const myPayload = {
+  //       offering: true,
+  //       offerId: theirInfo.firebaseKey,
+  //       firebaseKey,
+  //     };
+  //     updateMember(myPayload).then();
+  //   });
+  // };
+
+  // const updateTheirMember = () => {
+  //   getSingleMember(theirInfo.firebaseKey).then(() => {
+  //     const theirPayload = {
+  //       wanting: true,
+  //       offerId: myInfo.firebaseKey,
+  //       firebaseKey,
+  //     };
+  //     updateMember(theirPayload).then();
+  //   });
+  // };
+
   const handleTrade = () => {
     if (myInfo) {
       console.warn('trade will succeed');
+      tradeRequestPromise(myInfo, theirInfo).then();
+      router.push('/Community/Trades');
     } else {
-      console.warn('trade will fail');
+      console.warn('myInfo', myInfo, 'theirInfo', theirInfo);
     }
   };
 

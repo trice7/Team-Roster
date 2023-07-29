@@ -1,9 +1,22 @@
 // import { Table } from 'react-bootstrap/Table';
 import Table from 'react-bootstrap/Table';
-import { EyeFill, CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
+// import { EyeFill, CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
+import { useEffect, useState } from 'react';
+import { getOfferMembers } from '../../API/membersData';
+import { useAuth } from '../../utils/context/authContext';
+import TradeRow from '../../components/TradeRow';
 
 const Trades = () => {
   console.warn('Trades Page');
+  const [offers, setOffers] = useState([]);
+  // const [reload, setReload] = useState(true);
+  // const [allMembers, setAllMembers] = useState([]);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    getOfferMembers(user.uid).then(setOffers);
+  }, [user]);
+  console.warn(offers);
 
   return (
     <Table striped bordered hover variant="dark">
@@ -16,12 +29,9 @@ const Trades = () => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Thomas Rice</td>
-          <td>Urdnot Wrex</td>
-          <td>Cloud Strife</td>
-          <td><EyeFill type="button" /> <CheckCircleFill type="button" /> <XCircleFill type="button" /></td>
-        </tr>
+        {offers.map((item) => (
+          <TradeRow key={item.firebaseKey} offers={item} />
+        ))}
       </tbody>
     </Table>
   );

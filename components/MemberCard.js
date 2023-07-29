@@ -46,7 +46,7 @@ const MemberCard = ({
   return (
     <Card style={{ width: '18rem' }}>
       <Card.Header>{obj.memberName}</Card.Header>
-      <Card.Img variant="top" src={obj.image} />
+      <Card.Img className="member-img" variant="top" src={obj.image} />
       <Card.Body>
         <Card.Title>{obj.role}</Card.Title>
         <Card.Text>
