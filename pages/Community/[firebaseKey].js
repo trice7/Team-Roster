@@ -61,8 +61,9 @@ const TradeInfo = () => {
   const handleTrade = () => {
     if (myInfo) {
       console.warn('trade will succeed');
-      tradeRequestPromise(myInfo, theirInfo).then();
-      router.push('/Community/Trades');
+      tradeRequestPromise(myInfo, theirInfo).then(() => {
+        router.push('/Community/Trades');
+      });
     } else {
       console.warn('myInfo', myInfo, 'theirInfo', theirInfo);
     }

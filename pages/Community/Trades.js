@@ -9,31 +9,53 @@ import TradeRow from '../../components/TradeRow';
 const Trades = () => {
   console.warn('Trades Page');
   const [offers, setOffers] = useState([]);
+  const [render, setRender] = useState(false);
   // const [reload, setReload] = useState(true);
   // const [allMembers, setAllMembers] = useState([]);
   const { user } = useAuth();
 
   useEffect(() => {
     getOfferMembers(user.uid).then(setOffers);
-  }, [user]);
+  }, [user, render]);
   console.warn(offers);
 
+  const rerender = () => {
+    setRender(!render);
+  };
+
   return (
-    <Table striped bordered hover variant="dark">
-      <thead>
-        <tr>
-          <th>Requestor</th>
-          <th>Is Requesting</th>
-          <th>Is Offering</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {offers.map((item) => (
-          <TradeRow key={item.firebaseKey} offers={item} />
-        ))}
-      </tbody>
-    </Table>
+    <div>
+      <Table striped bordered hover variant="dark">
+        <thead>
+          <tr>
+            <th>Requestor</th>
+            <th>Is Requesting</th>
+            <th>Is Offering</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {offers.filter((item) => item.wanting).map((item) => (
+            <TradeRow key={item.firebaseKey} offers={item} rerender={rerender} />
+          ))}
+        </tbody>
+      </Table>
+      <Table striped bordered hover variant="dark">
+        <thead>
+          <tr>
+            <th>Request To</th>
+            <th>Your Request</th>
+            <th>Your Offer</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {offers.filter((item) => item.offering).map((item) => (
+            <TradeRow key={item.firebaseKey} offers={item} rerender={rerender} />
+          ))}
+        </tbody>
+      </Table>
+    </div>
   );
 
   // return (
